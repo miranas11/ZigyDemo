@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Data Display</title>
+        <style>
+            body {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100vh;
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .data-field {
+                border: 3px solid #ddd;
+                padding: 10px;
+                width: 400px; /* Increase width */
+                height: 50px; /* Add height */
+                text-align: center;
+                display: none;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="field1" class="data-field"></div>
+        <div id="field2" class="data-field"></div>
+        <div id="field3" class="data-field"></div>
+        <div id="field4" class="data-field"></div>
+        <div id="field5" class="data-field"></div>
+        <div id="field6" class="data-field"></div>
+
+        <script src="/socket.io/socket.io.js"></script>
+        <script>
+            const socket = io.connect();
+            const textFields = document.querySelectorAll(".data-field");
+
+            socket.on("checkbox updated", function (d) {
+                const { check, index } = d;
+                console.log(check);
+                textFields[index].style.display = check ? "block" : "none";
+            });
+
+            socket.on("data updated", function (d) {
+                const { data, index } = d;
+                console.log(data);
+                textFields[index].innerHTML = data;
+            });
+        </script>
+    </body>
+</html>

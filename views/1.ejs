@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <style>
+            .form-center {
+                display: flex;
+                justify-content: center;
+            }
+
+            form {
+                margin: 0;
+                position: absolute;
+                top: 50%;
+                -ms-transform: translateY(-50%);
+                transform: translateY(-50%);
+            }
+            div {
+                font-size: 30px;
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                margin-bottom: 10px;
+            }
+
+            input[type="checkbox"] {
+                width: 25px;
+                height: 25px;
+            }
+
+            input[type="text"] {
+                width: 200%;
+                padding: 12px;
+                margin: 10px 0;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                box-sizing: border-box;
+            }
+        </style>
+        <title>Document</title>
+    </head>
+    <body>
+        <div class="form-center">
+            <form class="root">
+                <div>
+                    <label for="Field1">Field1:</label>
+                    <input
+                        type="checkbox"
+                        id="Field1Checkbox"
+                        name="Field1Checkbox"
+                    />
+                </div>
+                <input
+                    type="text"
+                    id="Field1"
+                    name="data[Field1]"
+                    disabled="true"
+                />
+                <div>
+                    <label for="Field2">Field2:</label>
+
+                    <input
+                        type="checkbox"
+                        id="Field2Checkbox"
+                        name="Field2Checkbox"
+                    />
+                </div>
+                <input
+                    type="text"
+                    id="Field2"
+                    name="data[Field2]"
+                    disabled="true"
+                />
+                <div>
+                    <label for="Field3">Field3:</label>
+
+                    <input
+                        type="checkbox"
+                        id="Field3Checkbox"
+                        name="Field3Checkbox"
+                    />
+                </div>
+                <input
+                    type="text"
+                    id="Field3"
+                    name="data[Field3]"
+                    disabled="true"
+                />
+                <div>
+                    <label for="Field4">Field4:</label>
+
+                    <input
+                        type="checkbox"
+                        id="Field4Checkbox"
+                        name="Field4Checkbox"
+                    />
+                </div>
+                <input
+                    type="text"
+                    id="Field4"
+                    name="data[Field4]"
+                    disabled="true"
+                />
+                <div>
+                    <label for="Field5">Field5:</label>
+
+                    <input
+                        type="checkbox"
+                        id="Field5Checkbox"
+                        name="Field5Checkbox"
+                    />
+                </div>
+                <input
+                    type="text"
+                    id="Field5"
+                    name="data[Field5]"
+                    disabled="true"
+                />
+                <div>
+                    <label for="Field6">Field6:</label>
+
+                    <input
+                        type="checkbox"
+                        id="Field6Checkbox"
+                        name="Field6Checkbox"
+                    />
+                </div>
+                <input
+                    type="text"
+                    id="Field6"
+                    name="data[Field6]"
+                    disabled="true"
+                />
+            </form>
+        </div>
+        <script src="/socket.io/socket.io.js"></script>
+        <script>
+            const socket = io.connect();
+
+            const checkboxes = document.querySelectorAll(
+                'input[type="checkbox"]'
+            );
+            const textFields = document.querySelectorAll('input[type="text"]');
+
+            // let data1 = ["", "", "", "", "", ""];
+            let data, check;
+
+            checkboxes.forEach((checkbox, index) => {
+                //text fields get disabled when checkbox are unchecked
+                checkbox.addEventListener("change", () => {
+                    textFields[index].disabled = !checkbox.checked;
+                    check = checkbox.checked;
+                    socket.emit("checkbox sent", { check, index });
+                });
+
+                //send the data everytime whenever theres is a change in any input field
+                textFields[index].addEventListener("input", (e) => {
+                    data = e.target.value;
+                    socket.emit("data sent", { data, index });
+                });
+            });
+        </script>
+    </body>
+</html>
